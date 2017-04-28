@@ -1,0 +1,16 @@
+{
+  "name": "pharmacyapi",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "author": "Umani Welisara",
+  "license": "ISC",
+  "dependencies": {
+    
+    "body-parser": "^1.16.1",
+    
+    "express": "^4.14.1",
+    
+    "mongoose": "~4.2.4"
+  }
+}

@@ -1,0 +1,13 @@
+/PharmacyAPI/node_modules
+/PharmacyWebApp/node_modules
+/PharmacyAPI/.idea/
+/PharmacyWebApp/.idea/
+/PharmacyAPI/.idea/workspace.xml
+/PharmacyWebApp/.idea/workspace.xml
+
+/client/node_modules
+/client/npm-debug.log
+/client/typings
+.idea/
+.idea/workspace.xml
+npm-debug.log
