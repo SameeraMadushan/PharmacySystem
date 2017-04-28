@@ -7,6 +7,13 @@ var config      = require('../config/database'); // get db config file
 var passport	= require('passport');
 // var getToken=require('../commons/utilities');
 
+router.get('/test',function (req, res) {
+    return res.json({success:true});
+});
+router.get('/test2',function (req, res) {
+    return res.json({success:true,msg:"Test 2"});
+});
+
 /**
  * ==============================================================================================================
  * Finalized urls
