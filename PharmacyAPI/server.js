@@ -1,9 +1,49 @@
-var express=require('express');
+
+/**
+ * Created by Sameera on 5/2/2017.
+ */
+'user strict'
+
+var express = require('express');
+var server = express();
+var bodyParser = require('body-parser');
+var mongoose = require('mongoose');
+
+var routeprescrip = require('./routes/prescriptionroute');
+var routedispense = require('./routes/dispenseroute');
+var routepayment = require('./routes/paymentroute');
+
+server.use(routeprescrip);
+server.use(routedispense);
+server.use(routepayment);
+
+server.use(bodyParser.json());
+server.use(express.static(__dirname));
+
+//connect to mongoose
+/*mongoose.connect('mongodb://localhost:27017/PharmacySystem');
+var database = mongoose.connection;*/
+
+server.get('/', (req, res, next) => {
+    res.sendFile(__dirname + '/public/index.html');
+});
+//--------------------------------------------------------------SERVER SETUP----------------------------
+/*server.listen(3000, err => {
+    if (err) {
+        console.error(err);
+        return;
+    }
+    console.log('server listening on port 3000');
+});*/
+
+//--------------------------------------------UMANI------------------------------------
+
+//var express=require('express');
 var path=require('path');
 var cors=require('cors');
-var bodyParser=require('body-parser');
+//var bodyParser=require('body-parser');
 // var morgan      = require('morgan');
-var mongoose    = require('mongoose');
+//var mongoose    = require('mongoose');
 var passport	= require('passport');
 // var jwt         = require('jwt-simple');
 var session = require('express-session');
@@ -17,26 +57,26 @@ var api=require('./routes/api');
 
 var port = 3000;
 
-var app=express();
+var server=express();
 
 //view engine
-// app.set('views',path.join(__dirname,'client/views'));
-// app.set('view engine','ejs');
-// app.engine('html',require('ejs').renderFile);
+// server.set('views',path.join(__dirname,'client/views'));
+// server.set('view engine','ejs');
+// server.engine('html',require('ejs').renderFile);
 
 
 
 //body parser middleware
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended:false}));
+//server.use(bodyParser.json());
+server.use(bodyParser.urlencoded({extended:false}));
 
 // Use the passport package in our application
-app.use(passport.initialize());
+server.use(passport.initialize());
 
 mongoose.connect(config.database);
 
 
-app.use(session({secret: 'ssshhhhh',
+server.use(session({secret: 'ssshhhhh',
     saveUninitialized: true,
     resave: true,
     // store:new MongoStore({mongooseConnection:mongoose.connection})
@@ -44,12 +84,12 @@ app.use(session({secret: 'ssshhhhh',
 
 require('./config/passport')(passport);
 
-app.use(cors());
+server.use(cors());
 
 
-app.use('/api',api);
+server.use('/api',api);
 
 
-app.listen(port,function () {
+server.listen(port,function () {
     console.log("Server started on port "+port);
 });
