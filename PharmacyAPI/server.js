@@ -54,6 +54,7 @@ var config      = require('./config/database'); // get db config file
 var User        = require('./models/User');   // get the mongoose models
 
 var api=require('./routes/api');
+var patientApi=require('./routes/patient');
 
 var port = 3000;
 
@@ -87,7 +88,9 @@ require('./config/passport')(passport);
 server.use(cors());
 
 
-server.use('/api',api);
+
+app.use('/api',api);
+app.use('/api/patient',patientApi);
 
 
 server.listen(port,function () {
