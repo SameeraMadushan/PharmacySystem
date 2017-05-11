@@ -45,7 +45,7 @@ router.post('/update-patient',passport.authenticate('jwt', {session: false}),fun
     var decoded = jwt.decode(token, config.secret);
     var currentUserId = decoded._id;
 
-    Patient.update({_id:req.body.patient_id},{"$set":{"name":req.body.name,"age":req.body.age}},function(err,parent){
+    Patient.update({_id:req.body.patient_id},{"$set":{"name":req.body.name,"age":req.body.age,"address":req.body.address}},function(err,parent){
         if(err){
             return res.json(err);
         }
