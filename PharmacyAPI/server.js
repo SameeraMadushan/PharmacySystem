@@ -13,6 +13,10 @@ var routeprescrip = require('./routes/prescriptionroute');
 var routedispense = require('./routes/dispenseroute');
 var routepayment = require('./routes/paymentroute');
 
+server.use(routeprescrip);
+server.use(routedispense);
+server.use(routepayment);
+
 
 //--------------------------------------Darkz Server ---------------
 var routedrug = require('./routes/drug.route');
@@ -23,12 +27,6 @@ server.use(routebatch);
 
 
 //-------------------------------------------------------------
-server.use(routeprescrip);
-server.use(routedispense);
-server.use(routepayment);
-
-
-
 //----------------------------------------------------------------
 server.use(bodyParser.json());
 server.use(express.static(__dirname));
