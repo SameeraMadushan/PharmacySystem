@@ -17,6 +17,17 @@ server.use(routeprescrip);
 server.use(routedispense);
 server.use(routepayment);
 
+
+//--------------------------------------Darkz Server ---------------
+var routedrug = require('./routes/drug.route');
+server.use(routedrug);
+
+var routebatch = require('./routes/batch.route');
+server.use(routebatch);
+
+
+//-------------------------------------------------------------
+//----------------------------------------------------------------
 server.use(bodyParser.json());
 server.use(express.static(__dirname));
 
@@ -24,9 +35,9 @@ server.use(express.static(__dirname));
 /*mongoose.connect('mongodb://localhost:27017/PharmacySystem');
 var database = mongoose.connection;*/
 
-server.get('/', (req, res, next) => {
-    res.sendFile(__dirname + '/public/index.html');
-});
+// server.get('/', (req, res, next) => {
+//     res.sendFile(__dirname + '/public/index.html');
+// });
 //--------------------------------------------------------------SERVER SETUP----------------------------
 /*server.listen(3000, err => {
     if (err) {
@@ -54,10 +65,11 @@ var config      = require('./config/database'); // get db config file
 var User        = require('./models/User');   // get the mongoose models
 
 var api=require('./routes/api');
+var patientApi=require('./routes/patient');
+
 
 var port = 3000;
 
-var server=express();
 
 //view engine
 // server.set('views',path.join(__dirname,'client/views'));
@@ -87,7 +99,10 @@ require('./config/passport')(passport);
 server.use(cors());
 
 
+
 server.use('/api',api);
+server.use('/api/patient',patientApi);
+
 
 
 server.listen(port,function () {

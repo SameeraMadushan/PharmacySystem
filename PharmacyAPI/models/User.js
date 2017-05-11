@@ -18,7 +18,17 @@ var UserSchema = new Schema({
         unique: true,
         required: true
     },
-    accountType: {
+    possition: {
+        type: String,
+        required: true
+    },
+
+    email: {
+        type: String,
+        required: true
+    },
+
+    contactno: {
         type: String,
         required: true
     },
