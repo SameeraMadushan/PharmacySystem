@@ -15,7 +15,7 @@ router.get('/test2',function (req, res) {
     return res.json({success:true,msg:"Test 2"});
 });
 
-/**ha
+/**
  * sign up
  */
 
