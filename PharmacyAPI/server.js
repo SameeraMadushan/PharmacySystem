@@ -89,8 +89,8 @@ server.use(cors());
 
 
 
-app.use('/api',api);
-app.use('/api/patient',patientApi);
+server.use('/api',api);
+server.use('/api/patient',patientApi);
 
 
 server.listen(port,function () {
