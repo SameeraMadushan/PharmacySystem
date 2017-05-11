@@ -23,15 +23,37 @@ router.post('/create-patient',passport.authenticate('jwt', {session: false}),fun
         contactNumber: req.body.contactNumber,
         prescriptionDetails: req.body.prescriptionDetails,
         checkedBy: req.body.checkedBy,
-        date: req.body.date
+        date: req.body.date,
+        prescriptionNo:req.body.prescriptionNo
 
     });
     patient.save(function (err) {
         if (err) {
+            console.log(err);
             return res.json({success: false, msg: "error in saving to database"});
         }
         return res.json({success: true});
     })
+});
+
+
+/**
+ * update patient
+ */
+router.post('/update-patient',passport.authenticate('jwt', {session: false}),function (req, res) {
+    var token = getToken(req.headers);
+    var decoded = jwt.decode(token, config.secret);
+    var currentUserId = decoded._id;
+
+    Patient.update({_id:req.body.patient_id},{"$set":{"name":req.body.name,"age":req.body.age}},function(err,parent){
+        if(err){
+            return res.json(err);
+        }
+        else{
+            return res.json({success:true});
+        }
+    })
+
 });
 
 /**

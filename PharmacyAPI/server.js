@@ -24,9 +24,9 @@ server.use(express.static(__dirname));
 /*mongoose.connect('mongodb://localhost:27017/PharmacySystem');
 var database = mongoose.connection;*/
 
-server.get('/', (req, res, next) => {
-    res.sendFile(__dirname + '/public/index.html');
-});
+// server.get('/', (req, res, next) => {
+//     res.sendFile(__dirname + '/public/index.html');
+// });
 //--------------------------------------------------------------SERVER SETUP----------------------------
 /*server.listen(3000, err => {
     if (err) {
@@ -89,8 +89,8 @@ server.use(cors());
 
 
 
-app.use('/api',api);
-app.use('/api/patient',patientApi);
+server.use('/api',api);
+server.use('/api/patient',patientApi);
 
 
 server.listen(port,function () {
