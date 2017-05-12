@@ -12,10 +12,13 @@ var mongoose = require('mongoose');
 var routeprescrip = require('./routes/prescriptionroute');
 var routedispense = require('./routes/dispenseroute');
 var routepayment = require('./routes/paymentroute');
+var routeStock = require('./routes/stock');
 
 server.use(routeprescrip);
 server.use(routedispense);
 server.use(routepayment);
+server.use(routeStock);
+
 
 
 //--------------------------------------Darkz Server ---------------
