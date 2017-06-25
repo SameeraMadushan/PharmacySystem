@@ -70,16 +70,6 @@ var patientApi=require('./routes/patient');
 
 var port = 3000;
 
-
-//view engine
-// server.set('views',path.join(__dirname,'client/views'));
-// server.set('view engine','ejs');
-// server.engine('html',require('ejs').renderFile);
-
-
-
-//body parser middleware
-//server.use(bodyParser.json());
 server.use(bodyParser.urlencoded({extended:false}));
 
 // Use the passport package in our application

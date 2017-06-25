@@ -13,7 +13,7 @@ var PatientSchema = new Schema({
     },
     dateOfBirth: {
         type: Date,
-        unique: true,
+        unique: false,
         required: true
     },
     address: {
