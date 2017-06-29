@@ -51,11 +51,12 @@ export class PatientService {
       .catch(this.handleError);
   }
 
-  deletePatient(patientID:any):Observable<any>{
-    return this.http.delete('http://localhost:3000/delete-patient/' + patientID)
-      .map(this.extractData)
-      .catch(this.handleError);
-  }
+
+  // deletePatient(patientID:any):Observable<any>{
+  //   return this.http.delete('http://localhost:3000/delete-patient/' + patientID)
+  //     .map(this.extractData)
+  //     .catch(this.handleError);
+  // }
 
 }
 

@@ -98,3 +98,5 @@ server.use('/api/patient',patientApi);
 server.listen(port,function () {
     console.log("Server started on port "+port);
 });
+//
+

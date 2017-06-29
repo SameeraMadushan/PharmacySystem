@@ -3,7 +3,7 @@
  */
 
 import { Component } from '@angular/core';
-import {CourseService} from "../service/patient.service";
+import {PatientService} from "../service/patient.service";
 
 @Component({
   selector: 'patient-view',
@@ -36,15 +36,15 @@ export class PatientViewComponent {
         patient  => this.patient.push(patient),
         error =>  this.errorMessage = <any>error);
   }
-  deletePatient(id){
-    this.patientService.deletePatient(id)
-      .subscribe(
-
-        error =>  this.errorMessage = <any>error
-
-      );
-
-  }
+  // deletePatient(id){
+  //   this.patientService.deletePatient(id)
+  //     .subscribe(
+  //
+  //       error =>  this.errorMessage = <any>error
+  //
+  //     );
+  //
+  // }
 
 }
 

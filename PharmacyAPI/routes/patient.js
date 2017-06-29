@@ -43,45 +43,45 @@ router.post('/create-patient',function (req, res) {
     })
 });
 
-
-/**
- * update patient
- */
-router.post('/update-patient',function (req, res) {
-
-
-    Patient.update({_id:req.body.patient_id},{"$set":{"name":req.body.name,"age":req.body.age,"address":req.body.address}},function(err,parent){
-        if(err){
-            return res.json(err);
-        }
-        else{
-            return res.json({success:true});
-        }
-    })
-
-});
-
-/**
- * delete patient
- */
-router.delete('/remove-patient/:id',function (req, res) {
-
-    Patient.findOne({
-        _id:req.params.id
-    },function (err, patient) {
-        if(err)return rest.json(err);
-            patient.remove({_id:req.params.id},function (err, patient) {
-                if(err){
-                    res.send(err);
-                }
-                console.log(patient);
-                res.json(patient);
-            })
-
-    });
-});
-
-module.exports=router;
+//
+// /**
+//  * update patient
+//  */
+// router.post('/update-patient',function (req, res) {
+//
+//
+//     Patient.update({_id:req.body.patient_id},{"$set":{"name":req.body.name,"age":req.body.age,"address":req.body.address}},function(err,parent){
+//         if(err){
+//             return res.json(err);
+//         }
+//         else{
+//             return res.json({success:true});
+//         }
+//     })
+//
+// });
+//
+// /**
+//  * delete patient
+//  */
+// router.delete('/remove-patient/:id',function (req, res) {
+//
+//     Patient.findOne({
+//         _id:req.params.id
+//     },function (err, patient) {
+//         if(err)return rest.json(err);
+//             patient.remove({_id:req.params.id},function (err, patient) {
+//                 if(err){
+//                     res.send(err);
+//                 }
+//                 console.log(patient);
+//                 res.json(patient);
+//             })
+//
+//     });
+// });
+//
+// module.exports=router;
 
 
 

@@ -17,14 +17,13 @@
   {{p.name}} || {{p.age}} || {{p.dateOfBirth}} || {{p.address}} || {{p.contactNumber}}
   {{p. prescriptionNo}} || {{p. prescriptionDetails}}
   {{p.checkedBy}} || {{p.date}}
-  <button (click)="deleteCourse(p._id)" value="submit"elete</button>
+<!--  <button (click)="deletePatient(p._id)" >Delete</button>-->
 
 
 </div>
 
 <br>
 <br>
-<form name="patientForm">
 <div >
   <p>.......................About Patient..........................</p>
   Name :
@@ -64,7 +63,6 @@
   <input type="date" name="date" [(ngModel)]="submitData. date">
   <br><br>
   <br><br>
-  <button (click)="submitCourse()">SUBMIT</button>
+  <button (click)="submitPatient()">SUBMIT</button>
 </div>
 
-</form>
