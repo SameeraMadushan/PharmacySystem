@@ -21,21 +21,25 @@ router.get('/test2',function (req, res) {
 
 
 router.post('/sign-up',function (req, res) {
-    if(!req.body.email||!req.body.password||!req.body.userName||!req.body.firstName||!req.body.lastName||!req.body.possition||!req.body.contactno){
-        res.json({success:false,msg:'Enter the missing details'});
+    // if(!req.body.email||!req.body.password||!req.body.userName||!req.body.firstName||!req.body.lastName||!req.body.position||!req.body.contactno){
+    //     res.json({success:false,msg:'Enter the missing details'});
+    // }
+    if(1==2){
+
     }
     else{
         var newUser=new User({
             firstName:req.body.firstName,
             lastName:req.body.lastName,
             userName:req.body.userName,
-            possition:req.body.possition,
+            position:req.body.position,
             email:req.body.email,
             contactno:req.body.contactno,
             password:req.body.password
         });
         newUser.save(function (err) {
             if(err){
+                console.log(err)
                 res.json({success:false,msg:'Your username or password is incorrect.'});
             }
             else{
@@ -61,7 +65,7 @@ router.post('/authenticate',function (req, res) {
             user.comparePassword(req.body.password,function (err, isMatch) {
                 if(isMatch && !err){
                     var token=jwt.encode(user,config.secret);
-                    return res.json({success:true,token:'JWT '+token,msg:"Authentication success",possition:user.possition,
+                    return res.json({success:true,token:'JWT '+token,msg:"Authentication success",position:user.position,
                         firstName:user.firstName,lastName:user.lastName,email:user.email,contactno:user.contactno});
 
                 }
