@@ -104,7 +104,7 @@ mainapp.controller('patientController-2', function ($scope, $http) {
 	// create the controller and inject Angular's $scope
 	mainapp.controller('drugController', function($scope, $http) {
 
-	  $http.get("http://localhost:3000/api/drug").then(function (response) {
+	  $http.get(nodeDarkzURL+"/api/drug").then(function (response) {
 	  $scope.myDrug = response.data;
  
   
@@ -121,7 +121,7 @@ mainapp.controller('patientController-2', function ($scope, $http) {
   
         $http({  
             method: "POST",  
-            url: "http://localhost:3000/api/drug",  
+            url: nodeDarkzURL+"/api/drug",  
             data: $scope.formData,  
             headers: {  
                 'Content-Type': 'application/json'  
@@ -214,7 +214,7 @@ mainapp.controller('patientController-2', function ($scope, $http) {
   
         $http({  
             method: "POST",  
-            url: "http://localhost:3000/api/drug",  
+            url: nodeDarkzURL+"/api/drug",  
             data: JSON.stringify(data),  
             headers: {  
                 'Content-Type': 'application/json'  
@@ -242,14 +242,14 @@ mainapp.controller('patientController-2', function ($scope, $http) {
 
 	$scope.newQTY = 0;
 
-  $http.get("http://localhost:3000/api/drugCategory").then(function (response) {
+  $http.get(nodeDarkzURL+"/api/drugCategory").then(function (response) {
   $scope.myDrugCategory = response.data;
  
   
 	 
 	  });
 
-  $http.get("http://localhost:3000/api/batch/last").then(function (response) {
+  $http.get(nodeDarkzURL+"/api/batch/last").then(function (response) {
 
   $scope.thisMode = [];
   $scope.thisMode.batchNumber = response.data;
@@ -271,7 +271,7 @@ mainapp.controller('patientController-2', function ($scope, $http) {
 
   $scope.secondGET = function () {  
   	
-  	$http.get("http://localhost:3000/api/drug/category/"+$scope.thisMode.cat).then(function (response) {
+  	$http.get(nodeDarkzURL+"/api/drug/category/"+$scope.thisMode.cat).then(function (response) {
   		
 	      $scope.batchData = response.data;
 
@@ -287,7 +287,7 @@ mainapp.controller('patientController-2', function ($scope, $http) {
 
 $scope.drugpriceGET = function () {  
   	
-  	$http.get("http://localhost:3000/api/drug/drugname/"+$scope.thisMode.Dname).then(function (response) {
+  	$http.get(nodeDarkzURL+"/api/drug/drugname/"+$scope.thisMode.Dname).then(function (response) {
 	      $scope.priceData = response.data[0];
 
   		// alert($scope.priceData);
@@ -340,7 +340,7 @@ $scope.addBatch= function () {
 
         $http({  
             method: "POST",  
-            url: "http://localhost:3000/api/batch",  
+            url: nodeDarkzURL+"/api/batch",  
             data: data,  
             headers: {  
                 'Content-Type': 'application/json'  
@@ -370,7 +370,7 @@ $scope.addBatch= function () {
 
         $http({  
             method: "POST",  
-            url: "http://192.168.1.102:8080/api/pharmacy/stock",  
+            url: springURL+"/api/pharmacy/stock",  
             data: stockData,  
             headers: {  
                 'Content-Type': 'application/json'  
@@ -393,7 +393,6 @@ $scope.addBatch= function () {
 
 
 
-   
     //=============================================CHAMINDU CONTROLLER -======================
 
 
