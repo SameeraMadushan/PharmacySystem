@@ -391,6 +391,7 @@ $scope.addBatch= function () {
 
 
 
+   
     //=============================================CHAMINDU CONTROLLER -======================
 
 
@@ -427,7 +428,7 @@ $scope.addBatch= function () {
         function firstGET(callback) {
 
 
-            $http.get("http://127.0.0.1:8080/api/pharmacy/stock").then(function(response) {
+            $http.get(springURL+"/api/pharmacy/stock").then(function(response) {
                 $scope.stockTable = response.data;
                 $scope.isMailClicked = false;
 
@@ -501,7 +502,7 @@ $scope.addBatch= function () {
 
         function updateExpireList() {
 
-            $http.get("http://127.0.0.1:8080/api/pharmacy/stock/expiredStock").then(function(response) {
+            $http.get(springURL+"/api/pharmacy/stock/expiredStock").then(function(response) {
                 $scope.expiredStockTable = response.data;
 
 
@@ -525,7 +526,7 @@ $scope.addBatch= function () {
 
             if (result) {
 
-                $http.delete("http://127.0.0.1:8080/api/pharmacy/stock/deleteExpiredStock/" + $scope.selected).then(function(response) {
+                $http.delete(springURL+"/api/pharmacy/stock/deleteExpiredStock/" + $scope.selected).then(function(response) {
                     $scope.dangerDetails = response.data;
 
 
