@@ -384,3 +384,167 @@ $scope.addBatch= function () {
     	}  	  
 
 	}); 
+
+
+
+    //=============================================CHAMINDU CONTROLLER -======================
+
+
+    mainapp.controller('stockController', function($scope, $http) {
+
+        $scope.isMailClicked = false;
+        firstGET(secondGET);
+   //============================================= SEND EMAIL HANDLER ======================
+
+        $scope.sendOrderMail = function(selectedRow) {
+
+            $scope.mailDrugCategory = selectedRow.drugCategory;
+            $scope.mailDrugName = selectedRow.drugName;
+            $scope.mailDrugPrice = selectedRow.drugPrice;
+            $scope.mailDrugQuantity = selectedRow.drugQuantity;
+            $scope.isMailClicked = true;
+
+            console.log($scope.mailDrugCategory);
+
+
+
+        };
+
+
+        $scope.sendEmailOrder = function(selectedRow) {
+
+
+            $scope.isMailClicked = false;
+        }
+
+
+
+ //============================================= LOAD STOCK DETAILS TO TABLE HANDLER ======================
+        function firstGET(callback) {
+
+
+            $http.get("http://127.0.0.1:8080/api/pharmacy/stock").then(function(response) {
+                $scope.stockTable = response.data;
+                $scope.isMailClicked = false;
+
+                callback(updateDangerLevel)
+
+            });
+
+
+
+        };
+
+
+        function secondGET(callback) {
+
+
+            $http.get("http://192.168.1.108:3000/api/drug").then(function(response) {
+                $scope.dangerDetails = response.data;
+
+                callback();
+
+
+            });
+
+
+
+
+        };
+
+
+//============================================= COMPARE STOCK WITH DANGER LEVEL VALIDATION ======================
+
+        function updateDangerLevel() {
+
+
+            for (var i = 0; i < $scope.stockTable.length; i++) {
+
+
+                for (var r = 0; r < $scope.dangerDetails.length; r++) {
+
+                    if ($scope.dangerDetails[r].drugName == $scope.stockTable[i].drugName) {
+
+                        if ($scope.dangerDetails[r].dangerLevel >= $scope.stockTable[i].drugQuantity) {
+
+                            $scope.stockTable[i].reorderAlert = "danger";
+                            break;
+                        }
+
+
+                        if ($scope.dangerDetails[r].reorderLevel >= $scope.stockTable[i].drugQuantity) {
+
+                            $scope.stockTable[i].reorderAlert = "reorder";
+                            break;
+                        }
+                    }
+                }
+
+            }
+        }
+
+
+
+
+
+
+    });
+
+
+//============================================= LOAD EXPIRED STOCK DETAILS TO TABLE HANDLER ======================
+    mainapp.controller('expiredStockController', function($scope, $http) {
+        updateExpireList();
+
+        function updateExpireList() {
+
+            $http.get("http://127.0.0.1:8080/api/pharmacy/stock/expiredStock").then(function(response) {
+                $scope.expiredStockTable = response.data;
+
+
+                for (var i = 0; i < $scope.expiredStockTable.length; i++) {
+
+
+                    $scope.expiredStockTable[i].expDate = new Date($scope.expiredStockTable[i].expDate).toUTCString().slice(4, 16);
+                }
+
+            });
+        }
+
+//============================================= DELETE EXPIRED STOCK FROM DATABASE HANDLER ======================
+
+        $scope.deleteFromDB = function(selectedRow) {
+            var result = confirm("Are you sure you want to delete this record?");
+
+
+
+            $scope.selected = selectedRow._Id;
+
+            if (result) {
+
+                $http.delete("http://127.0.0.1:8080/api/pharmacy/stock/deleteExpiredStock/" + $scope.selected).then(function(response) {
+                    $scope.dangerDetails = response.data;
+
+
+                    if ($scope.dangerDetails == 'true') {
+
+                        updateExpireList();
+                        $scope.alert = true;
+
+                    } else {
+                        alert('Error');
+
+                    }
+
+
+                });
+            }
+
+
+
+
+        };
+
+
+
+
+    });
