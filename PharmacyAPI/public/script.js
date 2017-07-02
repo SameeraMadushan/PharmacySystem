@@ -71,6 +71,14 @@
             templateUrl: 'pages/new-patient.html',
             controller: 'patientController-2'
         })
+	.when('/', {
+            templateUrl: '../login.html',
+//             controller: 'patientController-2'
+        })
+	.when('/register', {
+            templateUrl: '../signup.html',
+//             controller: 'patientController-2'
+        })
         // route for the view patient page
         .when('/patients', {
             templateUrl: 'pages/patients.html',
