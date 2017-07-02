@@ -9,16 +9,18 @@ var server = express();
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 
-var routeprescrip = require('./routes/prescriptionroute');
-var routedispense = require('./routes/dispenseroute');
-var routepayment = require('./routes/paymentroute');
 var routeStock = require('./routes/stock');
 
-server.use(routeprescrip);
-server.use(routedispense);
-server.use(routepayment);
 server.use(routeStock);
 
+var routeprescrip = require('./routes/prescriptionroute');
+var routedispense = require('./routes/drugdispenseroute');
+var routedoctor = require('./routes/doctorroute');
+var patientroute=require('./routes/patientroute');
+server.use(patientroute);
+server.use(routeprescrip);
+server.use(routedispense);
+server.use(routedoctor);
 
 
 //--------------------------------------Darkz Server ---------------
