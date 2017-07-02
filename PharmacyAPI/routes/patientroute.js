@@ -8,8 +8,8 @@ var express = require('express');
 var router = express.Router();
 var bodyParser = require('body-parser');
 var patient = require('../models/patientmodel');
-
-
+var passport    = require('passport');
+var jwt  = require('jwt-simple');
 router.use(bodyParser.json());
 //--------------------------------------------------------------GET Requests----------------------------
 
@@ -44,7 +44,7 @@ router.get('/api/patient/last', function (req, res) {
 
 //--------------------------------------------------------------POST Requests----------------------------
 
-router.post('/api/patient', function (req, res) {
+router.post('/api/patient', passport.authenticate('jwt',{session:false}), function (req, res) {
 
     var Patientbody = req.body;
     if(Patientbody.PatientName === "" || Patientbody.DateOfBirth === "" || Patientbody.ContactNumber === "" ||
