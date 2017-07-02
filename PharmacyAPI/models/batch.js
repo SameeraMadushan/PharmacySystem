@@ -4,11 +4,17 @@ var Schema = mongoose.Schema;
 
 
 var BatchSchema = new Schema({
+
     batchNumber: {
         type: String,
         required: true
     },
-    drugId: {
+    drugPrice:{
+        type: String,
+        required:true
+    },
+
+    drugName: {
         type: String,
         required: true
     },
@@ -18,16 +24,11 @@ var BatchSchema = new Schema({
     },
 
     manufacturerDate: {
-        type: Date,
+        type: String,
         required: true
     },
     exprieDate: {
-        type: Date,
-        required: true
-    },
-
-    addedDate: {
-        type: Date,
+        type: String,
         required: true
     }
 
@@ -37,13 +38,20 @@ var Batch = module.exports = mongoose.model('Batch',BatchSchema);
 
 
 //get category
-module.exports.getBatchs = function (callback, limit) {
+module.exports.getBatchs= function (callback, limit) {
     Batch.find(callback).limit(limit);
 };
 
 
-//add category
-module.exports.addBatch = function( batchinfo ,callback){
+
+//get last batch record
+module.exports.getLastBatchId = function (callback) {
+    Batch.find(callback).sort({$natural:-1}).limit(1);
+}
+
+
+//add batch
+module.exports.addBatch= function( batchinfo ,callback){
     Batch.create(batchinfo , callback);
 }
 
