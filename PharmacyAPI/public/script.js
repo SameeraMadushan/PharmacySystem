@@ -1,6 +1,6 @@
-   var springURL = "http://192.168.1.102:8080";
+   var springURL = "http://192.168.1.100:8080";
     var nodeDarkzURL = "http://192.168.1.108:3000";
-	var DispenseURL = "http://192.168.1.100:3000";
+	var DispenseURL = "http://192.168.1.100:3001";
 // create the module and name it myApp
 	var mainapp = angular.module('mainapp', ['ngRoute','xlsx-model']);
 
@@ -618,7 +618,8 @@ mainapp.controller('dispensePatient', ['$scope', '$http', function ($scope, $htt
             url: DispenseURL+"/api/patient",
             data: data,
             headers:{
-                'Content-Type':'application/json'
+                'Content-Type':'application/json',
+                'Authorization':localStorage.getItem('id_token')
             }
         }).success(function (data, status, headers, config) {
             if(data.success === false){
