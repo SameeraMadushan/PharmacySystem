@@ -1,5 +1,6 @@
-   var springURL = "http://127.0.0.1:8080";
-    var nodeDarkzURL = "http://192.168.1.108:3000";	
+   var springURL = "http://192.168.1.102:8080";
+    var nodeDarkzURL = "http://192.168.1.108:3000";
+	var DispenseURL = "http://192.168.1.100:3000";
 // create the module and name it myApp
 	var mainapp = angular.module('mainapp', ['ngRoute','xlsx-model']);
 
@@ -23,22 +24,47 @@
                 controller: 'expiredStockController'
             })
 
-			// route for the contact page
-			.when('/batch', {
-				templateUrl : 'pages/batch.html',
-				controller  : 'batchController'
-			})
-			.when('/drug', {
-				templateUrl : 'pages/drugs.html',
-				controller  : 'drugController'
+	// route for the contact page
+	.when('/batch', {
+		templateUrl : 'pages/batch.html',
+		controller  : 'batchController'
+	})
+	.when('/drug', {
+		templateUrl : 'pages/drugs.html',
+		controller  : 'drugController'
 
-			})
-			.when('/viewdrug', {
-				templateUrl : 'pages/drugview.html',
-				controller  : 'drugController'
+	})
+	.when('/viewdrug', {
+		templateUrl : 'pages/drugview.html',
+		controller  : 'drugController'
 
-			})
+	})
+	//----------------------------------------SAMEERA ROUTING-------------------------	
+	// route for the patient page
+        .when('/patient', {
+            templateUrl : 'pages/registerPatient.html',
+            controller  : 'dispensePatient'
+        })
+        .when('/prescription', {
+            templateUrl : 'pages/addPrescription.html',
+            controller  : 'dispensePrescription'
 
+        })
+        .when('/doctor', {
+            templateUrl : 'pages/registerDoctor.html',
+            controller  : 'dispenseDoctor'
+
+        })
+        .when('/dispense', {
+            templateUrl : 'pages/dispensePrescription.html',
+            controller  : 'dispenseDrugs'
+
+        })
+        .when('/history', {
+            templateUrl : 'pages/editPrescription.html',
+            controller  : 'historyDispenseDrugs'
+
+        })
         //..............................................umani............................................................
         // route for the add patient page
         .when('/addPatients', {
@@ -554,3 +580,642 @@ $scope.addBatch= function () {
 
 
     });
+
+
+
+//-----------------------------------SAMEERA-------------------------------------
+
+mainapp.controller('dispensePatient', ['$scope', '$http', function ($scope, $http) {
+
+
+    $http.get(DispenseURL+"/api/patients")
+        .then(function (response) {
+            $scope.Patients = response.data;
+        });
+
+    $http.get(DispenseURL+"/api/patient/last")
+        .then(function (response) {
+
+            var patnt = {
+                PatientID: response.data
+            };
+            $scope.Patient = patnt;
+        });
+
+    $scope.addPatient = function (data) {
+
+        console.log(data);
+        $http({
+            method:"POST",
+            url: DispenseURL+"/api/patient",
+            data: data,
+            headers:{
+                'Content-Type':'application/json'
+            }
+        }).success(function (data, status, headers, config) {
+            if(data.success === false){
+                return $scope.alertSubmit = true;
+            }
+            else{
+                $scope.Patients.push(data);
+                var lastId= data.PatientID.split("PA")[1];
+                var newId = "PA"+(parseInt(lastId)+1);
+                $scope.Patient = {
+                    PatientID:newId
+                };
+                alert("Successfully Added!")
+                return data.alertSubmit = false;
+            }
+        })
+
+    }
+
+    $scope.updatePatient = function (data) {
+        var oldData= data;
+        console.log($scope.Pat);
+        $http.put(DispenseURL+"/api/patient/"+$scope.Pat.PatientID, data)
+            .success(function (data, status, headers, config) {
+                if(data.success=== false){
+                    return $scope.alertSubmit = true;
+                }
+                else{
+                    function findAndReplace(object, value, replaceValue) {
+                        for (var x in object) {
+                            if (object.hasOwnProperty(x)) {
+                                if (typeof object[x] === 'object') {
+                                    findAndReplace(object[x], value, replaceValue);
+                                }
+                                if (object[x] === value) {
+                                    object["name"] = replaceValue;
+                                    // break; // uncomment to stop after first replacement
+                                    console.log("*******");
+                                }
+                            }
+                        }
+                    }
+                    findAndReplace($scope.Patients, oldData, data);
+                    console.log("Updated!");
+                }
+            })
+            .error(function (data, status, header, config) {
+                console.log("Error Updating!")
+            });
+    }
+
+    $scope.removePatient = function (data) {
+        var conf=confirm("Are you sure you want to delete?");
+
+        if(conf) {
+            $http.delete(DispenseURL+"/api/patient/remove/" + data.PatientID, data)
+                .success(function (data, status, headers, config) {
+                    if (data.success === false) {
+                        return $scope.alertSubmit = true;
+                    }
+                    else {
+                        $http.get(DispenseURL+"/api/patients")
+                            .then(function (response) {
+                                $scope.Patients = response.data;
+                            });
+                    }
+                })
+                .error(function (data, status, header, config) {
+                    console.log("Error Deleting!");
+                });
+        }
+    }
+
+
+}]);
+
+mainapp.controller('dispenseDoctor', ['$scope', '$http', function ($scope, $http) {
+
+    $http.get(DispenseURL+"/api/doctors")
+        .then(function (response) {
+            $scope.Doctors = response.data;
+        });
+
+    $http.get(DispenseURL+"/api/doctor/last")
+        .then(function (response) {
+
+            var doc = {
+                DoctorID: response.data
+            };
+            $scope.Doctor = doc;
+        });
+
+    $scope.addDoctor = function (data) {
+
+        console.log(data);
+        $http({
+            method:"POST",
+            url: DispenseURL+"/api/doctor",
+            data: data,
+            headers:{
+                'Content-Type':'application/json'
+            }
+        }).success(function (data, status, headers, config) {
+            if(data.success === false){
+                return $scope.alertSubmit = true;
+            }
+            else{
+                $scope.Doctors.push(data);
+                var lastId= data.DoctorID.split("D")[1];
+                var newId = "D"+(parseInt(lastId)+1);
+                $scope.Doctor = {
+                    DoctorID:newId
+                };
+                alert("Successfully Added to the System!");
+                return data.alertSubmit = false;
+            }
+        })
+
+    }
+
+    $scope.updateDoctor = function (data) {
+        var oldData= data;
+        console.log(data);
+        $http.put(DispenseURL+"/api/docotr/"+data.DoctorID, data)
+            .success(function (data, status, headers, config) {
+                if(data.success=== false){
+                    return $scope.alertSubmit = true;
+                }
+                else{
+                    function findAndReplace(object, value, replaceValue) {
+                        for (var x in object) {
+                            if (object.hasOwnProperty(x)) {
+                                if (typeof object[x] === 'object') {
+                                    findAndReplace(object[x], value, replaceValue);
+                                }
+                                if (object[x] === value) {
+                                    object["name"] = replaceValue;
+                                    // break; // uncomment to stop after first replacement
+                                    console.log("*******");
+                                }
+                            }
+                        }
+                    }
+                    findAndReplace($scope.Doctors, oldData, data);
+                    console.log("Updated!");
+                }
+            })
+            .error(function (data, status, header, config) {
+                console.log("Error Updating!")
+            });
+    }
+
+    $scope.removeDoctor = function (data) {
+        var conf=confirm("Are you sure you want to delete?");
+
+        if (conf){
+            $http.delete(DispenseURL+"/api/doctor/remove/"+data.DoctorID, data)
+                .success(function (data, status, headers, config) {
+                    if (data.success === false) {
+                        return $scope.alertSubmit = true;
+                    }
+                    else {
+                        $http.get(DispenseURL+"/api/doctors")
+                            .then(function (response) {
+                                $scope.Doctors = response.data;
+                            });
+                    }
+                })
+                .error(function (data, status, header, config) {
+                    console.log("Error Deleting!");
+                });
+        }
+    }
+}]);
+
+mainapp.controller('dispensePrescription', ['$scope', '$http', function ($scope, $http) {
+
+    $http.get(DispenseURL+"/api/patients")
+        .then(function (response) {
+            $scope.Patient = response.data;
+        });
+
+    $http.get(DispenseURL+"/api/doctors")
+        .then(function (response) {
+            $scope.Doctor = response.data;
+        });
+
+    $http.get(DispenseURL+"/api/prescription/last")
+        .then(function (response) {
+            var pr={
+                PrescriptionID:response.data
+            }
+            $scope.press = pr;
+        });
+
+    $scope.addPrescription = function (data) {
+
+
+        $http({
+            method:"POST",
+            url: DispenseURL+"/api/prescription",
+            data: data,
+            headers:{
+                'Content-Type':'application/json'
+            }
+        }).success(function (data, status, headers, config) {
+            if(data.success === false){
+                return $scope.alertSubmit = true;
+            }
+            else{
+                var lastId= data.PrescriptionID.split("PR")[1];
+                var newId = "PR"+(parseInt(lastId)+1);
+                $scope.press = {
+                    PrescriptionID:newId
+                };
+                console.log(data);
+                alert("Successfully Added to the System!");
+                return $scope.alertSubmit=false;
+            }
+        });
+        $http.get(DispenseURL+"/api/prescriptions")
+            .then(function (response) {
+                $scope.press = response.data;
+            });
+    };
+
+    //api from rushan
+    $http.get(nodeDarkzURL+"/api/drug")
+        .then(function (response) {
+            $scope.pressDrugs = response.data;
+        });
+
+    $scope.addDrugToPrescription = function(data){
+        console.log(data);
+
+        // get - 192.168.1.102:8080/api/pharmacy/stock/drugName
+        // return Quantity
+        // put - /pharmacy/stock/updatestock
+        // body - drugName, drugQuantity
+        //
+        $scope.availableQuantity=0;
+        $http.get(springURL+"/api/pharmacy/stock/"+data.drugName)
+            .then(function (response) {
+                $scope.availableQuantity = response.data;
+                console.log($scope.availableQuantity);
+
+                if(data.Quantity <= $scope.availableQuantity){
+
+                    var updateStock = [{
+                        "drugName": data.drugName,
+                        "drugQuantity": data.Quantity
+                    }];
+                    console.log(updateStock);
+                    $http({
+                        method: "PUT",
+                        url: springURL+"/api/pharmacy/stock/update/drug",
+                        data: updateStock[0],
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    }).success(function (data, status, headers, config) {
+                        if(data.success=== false){
+                            return $scope.alertSubmit = true;
+                        }
+                        else{
+                            return $scope.alertSubmit = true;
+                        }
+                    }).error(function (data, status, header, config) {
+                        console.log("Error Updating!")
+                    });
+
+                    $http.get(DispenseURL+"/api/prescription/last")
+                        .then(function (response) {
+                            var id = response.data.split("PR")[1];
+                            $scope.press= "PR"+ (parseInt(id)-1);
+                            console.log(2);
+                            console.log($scope.press);
+                            secondExecution();
+                        });
+
+
+                    function secondExecution(){
+                        console.log(3);
+                        data={
+                            DispenseDrugID : $scope.lastDissID,
+                            PrescriptionID : $scope.press,
+                            DrugName : data.drugName,
+                            Quantity : data.Quantity,
+                            Dosage : data.Dosage,
+                            Schedule : data.Schedule
+                        };
+                        console.log(data);
+                        $http({
+                            method:"POST",
+                            url: DispenseURL+"/api/dispensedrug",
+                            data: data,
+                            headers:{
+                                'Content-Type':'application/json'
+                            }
+                        }).success(function (data, status, headers, config) {
+                            if(data.success === false){
+                                return $scope.alertSubmit = true;
+                            }
+                            else{
+                                if(typeof $scope.Pres === 'undefined'){
+                                    $scope.Pres = [{
+                                        DispenseDrugID : data.DispenseDrugID,
+                                        PrescriptionID : data.PrescriptionID,
+                                        DrugName : data.drugName,
+                                        Quantity : data.Quantity,
+                                        Dosage : data.Dosage,
+                                        Schedule : data.Schedule
+                                    }];
+                                    console.log($scope.Pres.DispenseDrugID);
+                                }else {
+                                    $scope.Pres.push(data);
+                                    console.log(data);
+                                    return data.alertSubmit = false;
+                                }
+                            }
+                        }).error(function(data, status, headers, config) {
+
+                            console.log("Error insert!");
+                            return $scope.alertSubmit = false;
+                        });
+                    }
+                }
+                else{
+                    alert("Oops! Stock not enough to issue this drug!");
+                }
+            });
+
+
+    };
+
+    $scope.successMsg = function(){
+        alert("Successfully Added to the System!");
+    };
+
+    $scope.removePressDrug = function (data) {
+        var conf = confirm("Are you sure want to delete?");
+        if (conf) {
+            var oldPresId = data.PrescriptionID;
+            $http.delete(DispenseURL+"/api/dispensedrug/remove/" + data.DispenseDrugID, data)
+                .success(function (data, status, headers, config) {
+                    if (data.success === false) {
+                        return $scope.alertSubmit = true;
+                    }
+                    else {
+                        $http.get(DispenseURL+"/api/dispensedrug/id/" + oldPresId)
+                            .then(function (response) {
+                                $scope.Pres = response.data;
+                                console.log($scope.Pres);
+                            });
+                    }
+                })
+                .error(function (data, status, header, config) {
+                    console.log("Error Deleting!");
+                });
+        }
+    }
+}]);
+
+
+mainapp.controller('dispenseDrugs', ['$scope', '$http', function ($scope, $http) {
+
+    $http.get(DispenseURL+"/api/prescriptions/status/Pending")
+        .then(function (response) {
+            $scope.Pres = response.data;
+        });
+
+    $scope.viewPrescription = function (data) {
+        $http.get(DispenseURL+"/api/dispensedrug/id/"+data.PrescriptionID)
+            .then(function (response) {
+                $scope.Drugs = response.data;
+                console.log($scope.Drugs);
+            });
+    };
+
+    $scope.IsVisible = false;
+    $scope.Show = function () {
+        //If DIV is visible it will be hidden and vice versa.
+        // $scope.IsVisible = $scope.IsVisible ? false : true;
+        if(!$scope.IsVisible){
+            $scope.IsVisible = true;
+        }
+    };
+    $scope.Hide = function () {
+        if($scope.IsVisible){
+            $scope.IsVisible = false;
+        }
+    };
+
+    $scope.removePressPlacedDrug = function (data) {
+
+        var conf = confirm("Are you sure want to delete?");
+
+        if (conf) {
+
+            var oldPresId = data.PrescriptionID;
+            $http.delete(DispenseURL+"/api/dispensedrug/remove/" + data.DispenseDrugID, data)
+                .success(function (data, status, headers, config) {
+                    if (data.success === false) {
+                        return $scope.alertSubmit = true;
+                    }
+                    else {
+                        $http.get(DispenseURL+"/api/dispensedrug/id/" + oldPresId)
+                            .then(function (response) {
+                                $scope.Drugs = response.data;
+                                console.log($scope.Drugs);
+                                console.log(oldPresId);
+                                var len = $scope.Drugs.length;
+                                if(len == 0){
+                                    $http.delete(DispenseURL+"/api/prescription/remove/" +oldPresId, data)
+                                        .success(function (data, status, headers, config) {
+                                            if (data.success === false) {
+                                                return $scope.alertSubmit = true;
+                                            }
+                                            else{
+                                                $http.get(DispenseURL+"/api/prescriptions/status/Pending")
+                                                    .then(function (response) {
+                                                        $scope.Pres = response.data;
+                                                        console.log($scope.Pres);
+                                                    });
+                                            }
+                                        })
+                                        .error(function (data, status, header, config) {
+                                            console.log("Error Deleting!");
+                                        });
+                                }
+                            });
+                    }
+                })
+                .error(function (data, status, header, config) {
+                    console.log("Error Deleting!");
+                });
+        }
+    };
+
+
+    $scope.removePrescription = function (data) {
+        var conf = confirm("Are you sure want to delete?");
+        if (conf) {
+            var oldPresId = data.PrescriptionID;
+            $http.delete(DispenseURL+"/api/dispensedrug/remove/prescription/" + data.PrescriptionID, data)
+                .success(function (data, status, headers, config) {
+                    if (data.success === false) {
+                        return $scope.alertSubmit = true;
+                    }
+                    else {
+                        $http.delete(DispenseURL+"/api/prescription/remove/" +oldPresId, data)
+                            .success(function (data, status, headers, config) {
+                                if (data.success === false) {
+                                    return $scope.alertSubmit = true;
+                                }
+                                else{
+                                    $http.get(DispenseURL+"/api/prescriptions/status/Pending")
+                                        .then(function (response) {
+                                            $scope.Pres = response.data;
+                                            console.log($scope.Pres);
+                                        });
+                                }
+                            })
+                            .error(function (data, status, header, config) {
+                                console.log("Error Deleting!");
+                            });
+                    }
+                })
+                .error(function (data, status, header, config) {
+                    console.log("Error Deleting!");
+                });
+        }
+    };
+
+    $scope.dispenseAndUpdateStatus = function(){
+        console.log($scope.prescription);
+        var data=[{
+            PatientName : $scope.prescription[0].PatientName,
+            DoctorName : $scope.prescription[0].DoctorName,
+            PrescriptionDate : $scope.prescription[0].PrescriptionDate,
+            Age: $scope.prescription[0].Age,
+            Reason: $scope.prescription[0].Reason,
+            PrescriptionStatus : "Issued"
+        }];
+        console.log(data[0]);
+        $http({
+            method: "PUT",
+            url: DispenseURL+"/api/prescriptions/" + $scope.prescription[0].PrescriptionID,
+            data: data[0],
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).success(function (data, status, headers, config) {
+            if(data.success=== false){
+                return $scope.alertSubmit = true;
+            }
+            else{
+                $http.get(DispenseURL+"/api/prescriptions/status/Pending")
+                    .then(function (response) {
+                        $scope.Pres = response.data;
+                    });
+            }
+        })
+            .error(function (data, status, header, config) {
+                console.log("Error Updating!")
+            });
+    };
+
+    $scope.passData = function (data){
+        console.log(data);
+        $scope.prescription = [{
+            PrescriptionID: data.PrescriptionID,
+            PatientName : data.PatientName,
+            DoctorName : data.DoctorName,
+            CreatedDate : data.CreatedDate,
+            PrescriptionDate : data.PrescriptionDate,
+            Age: data.Age,
+            Reason: data.Reason,
+            PrescriptionStatus : data.PrescriptionStatus
+        }];
+    };
+
+
+}]);
+
+
+//---------------History drugs--------
+
+mainapp.controller('historyDispenseDrugs', ['$scope', '$http', function ($scope, $http) {
+
+    $http.get(DispenseURL+"/api/prescriptions/status/Issued")
+        .then(function (response) {
+            $scope.Pres = response.data;
+        });
+
+    $scope.viewOldPrescription = function (data) {
+        $http.get(DispenseURL+"/api/dispensedrug/id/"+data.PrescriptionID)
+            .then(function (response) {
+                $scope.Drugs = response.data;
+                console.log($scope.Drugs);
+            });
+    };
+
+    $scope.IsVisible = false;
+    $scope.Show = function () {
+        //If DIV is visible it will be hidden and vice versa.
+        // $scope.IsVisible = $scope.IsVisible ? false : true;
+        if(!$scope.IsVisible){
+            $scope.IsVisible = true;
+        }
+    };
+    $scope.Hide = function () {
+        if($scope.IsVisible){
+            $scope.IsVisible = false;
+        }
+    };
+
+    $scope.removeOldPrescription = function (data) {
+        var conf = confirm("Are you sure want to delete?");
+        if (conf) {
+            var oldPresId = data.PrescriptionID;
+            $http.delete(DispenseURL+"/api/dispensedrug/remove/prescription/" + data.PrescriptionID, data)
+                .success(function (data, status, headers, config) {
+                    if (data.success === false) {
+                        return $scope.alertSubmit = true;
+                    }
+                    else {
+                        $http.delete(DispenseURL+"/api/prescription/remove/" +oldPresId, data)
+                            .success(function (data, status, headers, config) {
+                                if (data.success === false) {
+                                    return $scope.alertSubmit = true;
+                                }
+                                else{
+                                    $http.get(DispenseURL+"/api/prescriptions/status/Issued")
+                                        .then(function (response) {
+                                            $scope.Pres = response.data;
+                                            console.log($scope.Pres);
+                                        });
+                                }
+                            })
+                            .error(function (data, status, header, config) {
+                                console.log("Error Deleting!");
+                            });
+                    }
+                })
+                .error(function (data, status, header, config) {
+                    console.log("Error Deleting!");
+                });
+        }
+    };
+
+    $scope.passData = function (data){
+        console.log(data);
+        $scope.prescription = [{
+            PrescriptionID: data.PrescriptionID,
+            PatientName : data.PatientName,
+            DoctorName : data.DoctorName,
+            CreatedDate : data.CreatedDate,
+            PrescriptionDate : data.PrescriptionDate,
+            Age: data.Age,
+            Reason: data.Reason,
+            PrescriptionStatus : data.PrescriptionStatus
+        }];
+    };
+
+}]);
+
+
