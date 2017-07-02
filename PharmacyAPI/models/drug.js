@@ -49,7 +49,7 @@ var DrugSchema= new Schema({
 
 });
 
-var Drugs  = module.exports = mongoose.model('Drugs',DrugSchema);
+var Drugs  = module.exports = mongoose.model('drugs',DrugSchema);
 
 
 //get drugs
