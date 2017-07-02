@@ -1,0 +1,231 @@
+<style type="text/css">
+   .files input {
+   outline: 2px dashed #92b0b3;
+   outline-offset: -10px;
+   -webkit-transition: outline-offset .15s ease-in-out, background-color .15s linear;
+   transition: outline-offset .15s ease-in-out, background-color .15s linear;
+   padding: 120px 0px 85px 35%;
+   text-align: center !important;
+   margin: 0;
+   width: 100% !important;
+   }
+   .files input:focus{     outline: 2px dashed #92b0b3;  outline-offset: -10px;
+   -webkit-transition: outline-offset .15s ease-in-out, background-color .15s linear;
+   transition: outline-offset .15s ease-in-out, background-color .15s linear; border:1px solid #92b0b3;
+   }
+   .files{ position:relative}
+   .files:after {  pointer-events: none;
+   position: absolute;
+   top: 60px;
+   left: 0;
+   width: 50px;
+   right: 0;
+   height: 56px;
+   content: "";
+   background-image: url(https://image.flaticon.com/icons/png/128/109/109612.png);
+   display: block;
+   margin: 0 auto;
+   background-size: 100%;
+   background-repeat: no-repeat;
+   }
+   .color input{ background-color:#f1f1f1;}
+   .files:before {
+   position: absolute;
+   bottom: 10px;
+   left: 0;  pointer-events: none;
+   width: 100%;
+   right: 0;
+   height: 57px;
+   content: " or drag it here. ";
+   display: block;
+   margin: 0 auto;
+   color: #2ea591;
+   font-weight: 600;
+   text-transform: capitalize;
+   text-align: center;
+   }
+</style>
+<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">
+   <div class="row">
+      <ol class="breadcrumb">
+         <li>
+            <a href="#">
+               <svg class="glyph stroked home">
+                  <use xlink:href="#stroked-home"></use>
+               </svg>
+            </a>
+         </li>
+         <li class="active"> Batch</li>
+      </ol>
+   </div>
+   <!--/.row-->
+   <!-- 	<div class="row">
+      <div class="col-lg-12">
+      	<h1 class="page-header">Drugs</h1>
+      </div>
+      </div> --><!--/.row-->
+   <div class="row">
+      <div class="col-lg-12">
+         <div class="panel panel-default">
+            <div class="panel-heading">Add New Batch</div>
+            <div class="panel-body">
+               <!-- <h1 class="page-header">Add Drugs Manualy</h1> -->
+               <form class="form-horizontal" ng-submit="addDrug()">
+                  <div class="form-group">
+                     <label class="control-label col-sm-3">Drug Category:</label>
+                     <div class="col-md-6">
+                        <select    class="form-control" required data-error="Select a Product!" tabindex="1">
+                           <option style="display:none" value="">Select a Drug Category</option>
+                           <option value="Narcotics">Narcotics</option>
+                           <option value="Drugs used in the treatment of injections">Drugs used in the treatment of injections</option>
+                           <option value="Drugs used in the treatment of Cardiovascular system">Drugs used in the treatment of Cardiovascular system</option>
+                           <option value="Drugs acting on the central nervous system">Drugs acting on the central nervous system</option>
+                           <option value="Drugs affecting nutrition &amp; blood">Drugs affecting nutrition &amp; blood</option>
+                           <option value="Drugs used in the treatment of diseases of the respiratory system">Drugs used in the treatment of diseases of the respiratory system</option>
+                           <option value="Immunological product and vaccines">Immunological product and vaccines</option>
+                           <option value="Drugs used in the treatment of the endocrine system">Drugs used in the treatment of the endocrine system</option>
+                           <option value="Drugs acting on the gastrointestinal system">Drugs acting on the gastrointestinal system</option>
+                           <option value="Drugs acting on eye">Drugs acting on eye</option>
+                        </select>
+                     </div>
+                  </div>
+                  <div class="form-group">
+                     <label class="control-label col-sm-3">Drug Name:</label>
+                     <div class="col-md-6">
+                        <select   class="form-control"   required data-error="Select a Product!" tabindex="1">
+                           <option style="display:none" value="">Select a Drug Category</option>
+                           <option ng-repeat="" ng-model=""></option>
+                        </select>
+                     </div>
+                  </div>
+                  <div class="form-group">
+                     <label class="control-label col-sm-3">Batch Number:</label>
+                     <div class="col-md-4">
+                        <input type="text" class="form-control" id="bNumber"   name="bNumber" ng-model="formData.bNumber" required>
+                     </div>
+                  </div>
+                  <div class="form-group">
+                     <label class="control-label col-sm-3">Type:</label>
+                     <div class="col-md-4">
+                        <select ng-model="drugType" class="form-control"  required data-error="Select a Product!" tabindex="1">
+                           <option style="display:none" value="">Select a Drug type</option>
+                           <option value="AMP">Cartoons</option>
+                           <option value="Tablet">Bottles</option>
+                        </select>
+                     </div>
+                  </div>
+                  <div ng-show="drugType=='AMP' || drugType=='Tablet'" class="form-group">
+                     <label class="control-label col-sm-3">Content:</label>
+                     <div class="col-md-4">
+                        <select ng-model="drugContent" class="form-control"   required data-error="Select a Product!" tabindex="1"  >
+                           <option style="display:none" value="">Select a Drug type</option>
+                           <option value="Tablets">Tablets</option>
+                           <option value="Liquid">Liquid</option>
+                        </select>
+                     </div>
+                  </div>
+                  <div ng-show="drugContent == 'Tablets'" class="form-group">
+                     <label class="control-label col-sm-3">Content Type:</label>
+                     <div class="col-md-4">
+                        <select ng-model="drugContentTab" class="form-control" required data-error="Select a Product!" tabindex="1">
+                           <option style="display:none" value="">Select a Drug type</option>
+                           <option value="Bottles">Bottles</option>
+                           <option value="Cards">Cards</option>
+                        </select>
+                     </div>
+                  </div>
+                  <!-- <div class="form-group"> -->
+                     <!-- <label class="control-label col-sm-3">Drug Price:</label> -->
+                     <!-- <div class="col-md-4"> -->
+                        <input type="hidden"  class="form-control" id="dPrice" min="0"   name="dPrice"  required pattern="\d*" title="Numbers only" disabled value="500">
+                     <!-- </div> -->
+                  <!-- </div> -->
+                  <div ng-show="drugContent == 'Liquid' || drugContentTab == 'Bottles' || drugContentTab == 'Cards'" class="form-group">
+                     <label class="control-label col-sm-3">Number of cartoons:</label>
+                     <div class="col-md-4">
+                        <input type="number" class="form-control" id="dDangerLevel"  min="0"  name="dDangerLevel" ng-model="qty.cartoon" required pattern="\d*" >
+                     </div>
+                  </div>
+                  <div ng-show="drugContent == 'Liquid' || drugContentTab == 'Bottles'" class="form-group">
+                     <label class="control-label col-sm-3">Number of bottles per cartoons:</label>
+                     <div class="col-md-4">
+                        <input type="number" class="form-control" id="d2ReorderLevel" min="0"   name="dReorderLevel" ng-model="qty.bottle" required pattern="\d*" >
+                     </div>
+                  </div>
+                  <div ng-show="drugContentTab == 'Cards'" class="form-group">
+                     <label class="control-label col-sm-3">Number of cards per cartoons:</label>
+                     <div class="col-md-4">
+                        <input type="number" class="form-control" id="2" min="0"   name="dReorder2Level"  required pattern="\d*" ng-model="qty.card" >
+                     </div>
+                  </div>
+                  <div ng-show="drugContentTab == 'Cards'" class="form-group">
+                     <label class="control-label col-sm-3">Number of Tablets per Card</label>
+                     <div class="col-md-4">
+                        <input type="number" class="form-control" id="dReorderLevel" min="0"   name="dReorderLevel" ng-model="qty.tablet" required pattern="\d*" >
+                     </div>
+                  </div>
+                  <div ng-show="drugContentTab == 'Bottles'" class="form-group">
+                     <label class="control-label col-sm-3">Number of Tablets per Bottle</label>
+                     <div class="col-md-4">
+                        <input type="number" class="form-control" id="dReorderLevel" min="0"   name="dReorderLevel" ng-model="qty.tabPerBottle" required pattern="\d*" >
+                     </div>
+                  </div>
+                  <!-- * qty.tabPerBottle * qty.tablet * qty.card -->
+                  <div class="form-group">
+                     <label class="control-label col-sm-3">Quantity:</label>
+
+                     <div ng-show="drugContentTab == 'Cards'" class="col-md-4">
+
+                        <input type="number" class="form-control" id="dPrice"   name="dPrice"   title="Numbers only"  value="{{qty.cartoon * qty.bottle * qty.tablet}}" disabled>
+                     </div>                     
+                      <div ng-show="drugContentTab == 'Bottles'" class="col-md-4">
+
+                        <input type="number" class="form-control" id="dPrice"   name="dPrice"   title="Numbers only"  value="{{qty.cartoon * qty.bottle * qty.tabPerBottle}}" disabled>
+                     </div>
+                     <div ng-show="drugContent == 'Liquid' " class="col-md-4">
+                        <input type="number" class="form-control" id="dPrice"   name="dPrice"  title="Numbers only"  value="{{qty.cartoon* qty.bottle }}" disabled>
+                     </div>
+                  </div>
+                  <div class="form-group">
+                     <label class="control-label col-sm-3">Manufacure Date:</label>
+                     <div class="col-md-4" required>
+                        <input type="date" class="form-control" id="dDosage"   name="dDosage" ng-model="formData.mDate" >
+                     </div>
+                  </div>
+                  <div class="form-group">
+                     <label class="control-label col-sm-3">Expire Date:</label>
+                     <div class="col-md-4" required>
+                        <input type="date" class="form-control" id="dDosage"   name="dDosage" ng-model="formData.eDate">
+                     </div>
+                  </div>
+                  <div class="form-group">
+                     <input type="hidden" id="DATE" name="DATE"  ng-model="formData.addedDate">
+                  </div>
+                  <div class="form-group">
+                     <div class="col-sm-offset-2 col-md-4">
+                        <button type="submit" class="btn btn-success"  >Add Batch</button>
+                     </div>
+                  </div>
+                  <div class="form-group">
+                     <div class="col-sm-offset-2 col-md-8">
+                        <!--      	 <div ng-show="alertSubmit===true" class="alert alert-success inner" role="alert" style="margin-top:10px">
+                           <button type="button" class="btn btn-success"  ng-click="alertSubmit=false"><span aria-hidden="true">&times;
+                           </span><span class="sr-only">Close</span></button>
+                           <strong>Well done!</strong> Successfully  data has been inserted !
+                           </div> -->
+                        <div ng-show="alertSubmit===true" class="alert bg-success" role="alert">
+                           <svg class="glyph stroked checkmark">
+                              <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#stroked-checkmark"></use>
+                           </svg>
+                           <strong>Well done!</strong> Successfully  data has been inserted ! <a href="" class="pull-right" ng-click="alertSubmit=false"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>&times;</a>
+                        </div>
+                     </div>
+                  </div>
+               </form>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+<!--/.row-->
+</div>	<!--/.main-->
