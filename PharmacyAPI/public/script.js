@@ -11,11 +11,15 @@
 				// controller  : 'mainController'
 			})
 
-			// route for the about page
+			// route for the stock page
 			.when('/stock', {
-				templateUrl : 'pages/stock.html',
-				controller  : 'stockController'
-			})
+                templateUrl: 'pages/stock.html',
+                controller: 'stockController'
+            })
+			.when('/expiredStock', {
+                templateUrl: 'pages/expiredStock.html',
+                controller: 'expiredStockController'
+            })
 
 			// route for the contact page
 			.when('/batch', {
