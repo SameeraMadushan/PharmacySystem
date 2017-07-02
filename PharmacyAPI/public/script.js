@@ -1,4 +1,6 @@
-	// create the module and name it myApp
+   var springURL = "http://127.0.0.1:8080";
+    var nodeDarkzURL = "http://192.168.1.108:3000";	
+// create the module and name it myApp
 	var mainapp = angular.module('mainapp', ['ngRoute','xlsx-model']);
 
 	// configure our routes
@@ -444,7 +446,7 @@ $scope.addBatch= function () {
         function secondGET(callback) {
 
 
-            $http.get("http://192.168.1.108:3000/api/drug").then(function(response) {
+            $http.get(nodeDarkzURL+"/api/drug").then(function(response) {
                 $scope.dangerDetails = response.data;
 
                 callback();
