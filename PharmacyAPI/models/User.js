@@ -18,7 +18,7 @@ var UserSchema = new Schema({
         unique: true,
         required: true
     },
-    possition: {
+    position: {
         type: String,
         required: true
     },
