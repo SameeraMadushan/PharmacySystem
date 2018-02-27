@@ -1,0 +1,103 @@
+<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">
+    <div class="row">
+        <ol class="breadcrumb">
+            <li>
+                <a href="#">
+                    <svg class="glyph stroked home">
+                        <use xlink:href="#stroked-home"></use>
+                    </svg>
+                </a>
+            </li>
+            <li class="active">Register Patient</li>
+        </ol>
+    </div>
+    <style type="text/css">
+        tr.row-name {
+            font-size: 15px;
+            color: #448aff;
+            text-transform: uppercase;
+        }
+    </style>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">Register Patient</div>
+                <div class="panel-body">
+                    <!-- <h1 class="page-header">Add Drugs Manualy</h1> -->
+                    <form class="form-horizontal" name="RegPatient">
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">Patient ID : </label>
+                            <div class="col-md-4">
+                                <input type="text" class="form-control" id="patientId" name="patientId" disabled="true" value="PatientID" ng-model="Patient.PatientID">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">Patient Name :</label>
+                            <div class="col-md-4">
+                                <input type="text" class="form-control" id="patientName" name="PatientName" placeholder="Enter Patinet Name" ng-model="Patient.PatientName" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">Date of Birth :</label>
+                            <div class="col-md-4">
+                                <input type="date" class="form-control" id="dob" name="dob" placeholder="Enter Date of Birth" ng-model="Patient.DateOfBirth" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">Contact Number :</label>
+                            <div class="col-md-4">
+                                <input type="text" class="form-control" id="contact" name="contact" placeholder="Enter Contact Number" ng-model="Patient.ContactNumber" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-3"></label>
+                            <div class="col-md-4">
+                                <button name="nextbtn" ng-click="addPatient(Patient)" ng-disabled="RegPatient.$invalid" ng-model="Patient" class="btn btn-success">Save</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">Registered Patients</div>
+
+                <div class="panel-body">
+                    <!-- <h1 class="page-header">Add Drugs Manualy</h1> -->
+                    <table data-toggle="table" class="table table-bordered table-striped table-hover">
+                        <thead>
+                            <tr class="row-name">
+                                <th>Patient ID</th>
+                                <th>Patient Name</th>
+                                <th>Date of birth</th>
+                                <th>Contact Number</th>
+                                <th>Registered Date</th>
+                                <th>Edit</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <form >
+                            <tr ng-repeat="Pati in Patients">
+                                <td ng-model="Pat.PatientID">{{Pati.PatientID}}</td>
+                                <td ng-model="Pat.PatientName">{{Pati.PatientName}}</td>
+                                <td ng-model="Pat.DateOfBirth">{{Pati.DateOfBirth}}</td>
+                                <td ng-model="Pat.ContactNumber">{{Pati.ContactNumber}}</td>
+                                <td ng-model="Pat.CreatedDate">{{Pati.CreatedDate}}</td>
+                                <td style="text-align: center" class="col-md-2"><button class="btn btn-success btn-xs" ng-model="Pat" ng-show="save" ng-click="save=false; updatePatient(Pat)">Save</button>
+                                    <button class="btn btn-warning btn-xs" ng-model="edit" ng-hide="save" ng-click="save=true">Edit</button>
+                                    <button class="btn btn-warning btn-xs" ng-model="cancel" ng-show="save" ng-click="save=false">Cancel</button>
+                                    <button class="btn btn-danger btn-xs" ng-model="delete" ng-click="removePatient(Pati)" ng-show="save">Delete</button>
+                            </form>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+

@@ -20,14 +20,34 @@ router.get('/api/batch', function (req, res) {
     });
 });
 
+//--------------------------------------------------------------GET Last Record ID+1----------------------------
+
+router.get('/api/batch/last', function (req, res) {
+    var lastId=0;
+    modelbatch.getLastBatchId(function (err, lastBatchID) {
+        if(err){
+            res.json({success:false, msg:'Get request Fail by route!!'});
+        }else {
+            if(lastBatchID.length > 0){
+                lastId = lastBatchID[0].batchNumber.split("BA")[1];
+                res.send("BA"+ (parseInt(lastId)+1));
+            }
+            else{
+                res.send("BA"+ (parseInt(lastId)+1));
+            }
+        }
+    })
+});
+
 //--------------------------------------------------------------POST Requests----------------------------
 
 router.post('/api/batch', function (req, res) {
     var prescr = req.body;
     modelbatch.addBatch(prescr, function (err,batchObj) {
         if(err){
-            res.json(err);
+
             res.json({success:false, msg:'Post request Fail by route!!'});
+            return;
         }
         res.json(batchObj);
     })

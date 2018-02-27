@@ -3,9 +3,9 @@ var router=express.Router();
 
 var User=require('../models/User');
 var Patient=require('../models/Patient');
-var jwt         = require('jwt-simple');
+var jwt         = require('jwt-simple');//to get the token in node js
 var config      = require('../config/database'); // get db config file
-var passport	= require('passport');
+var passport	= require('passport');// authentication library, sessions are apart of authorization
 var getToken=require('../commons/utilities');
 /**
  * add patient
@@ -67,13 +67,13 @@ router.delete('/remove-patient/:id',passport.authenticate('jwt', { session: fals
         _id:req.params.id
     },function (err, patient) {
         if(err)return rest.json(err);
-            patient.remove({_id:req.params.id},function (err, patient) {
-                if(err){
-                    res.send(err);
-                }
-                console.log(patient);
-                res.json(patient);
-            })
+        patient.remove({_id:req.params.id},function (err, patient) {
+            if(err){
+                res.send(err);
+            }
+            console.log(patient);
+            res.json(patient);
+        })
 
     });
 });

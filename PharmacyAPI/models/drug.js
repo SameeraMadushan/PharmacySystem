@@ -4,17 +4,14 @@ var Schema = mongoose.Schema;
 
 var DrugSchema= new Schema({
 
-    drugId: {
-        type: String,
-        unique: true,
-        required: true
-    },
+
     drugCategory: {
         type: String,
-        required: true
+        required:true
     },
     drugName: {
         type: String,
+        unique:true,
         required: true
     },
     drugType: {
@@ -22,7 +19,7 @@ var DrugSchema= new Schema({
         required: true
     },
     drugPrice: {
-        type: Number,
+        type: String,
         required: true
     },
 
@@ -48,27 +45,37 @@ var DrugSchema= new Schema({
     frequency: {
         type: String,
         required: true
-    },
-
-    addedDate: {
-        type: String,
-        required: true
     }
 
 });
 
-var drugs = module.exports = mongoose.model('Drug',DrugSchema);
+var Drugs  = module.exports = mongoose.model('drugs',DrugSchema);
 
 
 //get drugs
-module.exports.getDrugs = function (callback, limit) {
-    drugs.find(callback).limit(limit);
+module.exports.getDrugs= function (callback, limit) {
+    Drugs.find(callback).limit(limit);
 };
+
+//get drugs by id
+module.exports.getDrugById= function (id, callback) {
+    Drugs.findById(id,callback);
+};
+
+//get drugs  by category
+module.exports.getDrugByCategory = function (catDrug, callback) {
+    Drugs.find({drugCategory: catDrug},callback);
+}
+
+//get drugs  by drugname
+module.exports.getDrugByName = function (catDrug, callback) {
+    Drugs.find({drugName: catDrug},callback);
+}
 
 
 //add drugs
-module.exports.addDrug = function( drugsinfo ,callback){
-    drugs.create(drugsinfo , callback);
+module.exports.addDrug= function( drugsinfo ,callback){
+    Drugs.create(drugsinfo , callback);
 }
 
 //upadate drugs
@@ -85,49 +92,52 @@ module.exports.updateDrug= function( drugId, drugsinfo, options ,callback){
         dosage: drugsinfo.dosage,
         frequency: drugsinfo.frequency
     }
-    drugs.findOneAndUpdate(query, update, options , callback);
+    Drugs.findOneAndUpdate(query, update, options , callback);
 }
 
-var DrugCategorySchema = new Schema({
-
-    drugCategoryId: {
-        type: String,
-        unique: true,
-        required: true
-    },
-    drugCategory: {
-        type: String,
-        required: true
-    },
-    addedDate: {
-        type: Date,
-        required: true
-    }
-
-});
-
-var drugcategory = module.exports = mongoose.model('Drugcate',DrugCategorySchema);
-
-
-//get category
-module.exports.getDrugsCategory = function (callback, limit) {
-    drugcategory.find(callback).limit(limit);
-};
-
-
-//add category
-module.exports.addDrugCategory = function( drugsCateinfo ,callback){
-    drugcategory.create(drugsCateinfo , callback);
-}
-
-//upadate category
-module.exports.updateDrugCategory= function( id, drugsCateinfo, options ,callback){
-    var query = {drugCategoryId:id};
-    var update = {
-        drugCategory : drugsCateinfo.drugCategory,
-        addedDate : drugsCateinfo.addedDate
-
-
-    }
-    drugcategory.findOneAndUpdate(query, update, options , callback);
-}
+// var DrugCategorySchema = new Schema({
+//
+//     drugCategoryId: {
+//         type: String,
+//         unique: true,
+//         required: true
+//     },
+//     drugCategory: {
+//         type: String,
+//         required: true
+//     },
+//     addedDate: {
+//         type: Date,
+//         required: true
+//     }
+//
+// });
+//
+// var drugcategory = module.exports = mongoose.model('Drugcate',DrugCategorySchema);
+//
+//
+// // //get category
+// module.exports.getDrugsCategory = function (callback, limit) {
+//    drugcategory.find(callback).limit(limit);
+// };
+//
+// // //get category by id
+// module.exports.getDrugCategoryById = function (id, callback) {
+//     drugcategory.findById(id,callback);
+// };
+//
+//  //add category
+//  module.exports.addDrugCategory = function( drugsCateinfo ,callback){
+//     drugcategory.create(drugsCateinfo , callback);
+// }
+//
+// //upadate category
+// module.exports.updateDrugCategory= function( id, drugsCateinfo, options ,callback){
+//      var query = {drugCategoryId:id};
+//      var update = {
+//          drugCategory : drugsCateinfo.drugCategory,
+//         addedDate : drugsCateinfo.addedDate
+//
+//      }
+//     drugcategory.findOneAndUpdate(query, update, options ,  callback);
+// }
